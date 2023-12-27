@@ -9,7 +9,7 @@ describe('Task1', () => {
 
     beforeAll(async () => {
         code = await compile('Task1');
-    });
+    }); 
 
     let blockchain: Blockchain;
     let task1: SandboxContract<Task1>;
