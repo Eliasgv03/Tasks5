@@ -30,7 +30,8 @@
         accept_message();
 
         seqno = nseqno ;
-        etime =  now()+lf ;
+        etime =  lf + now() ;
+        
         
  
  
@@ -50,7 +51,7 @@
         send_raw_message(m,128);
 
     }
-    
+
 
 
 }
