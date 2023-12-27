@@ -13,8 +13,9 @@
       
     if (op == 0x9df10277){
         
-        slice ref = messagge~load_ref().begin_parse();
-        int hash = slice_hash(ref);
+        cell ref1 = messagge~load_ref();
+        int hash = cell_hash(ref1);
+        slice ref = begin_parse(ref1);
         
         int qi = messagge~load_uint(64);
         slice sig = messagge~load_bits(512); 
