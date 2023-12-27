@@ -10,6 +10,20 @@
     slice r = s~load_msg_addr();
     int seqno = s.slice_last(32).preload_uint(32);
     int op = messagge~load_uint(32);
+      
+    
+
+    if (op == 0xbb4be234){
+        throw_if(124 , etime <= now());
+        accept_message();
+
+        cell m = begin_cell()
+            .store_uint(0x18 , 6).store_slice(r).store_grams(0).store_uint(0,1 + 4 + 4 + 64 + 32 + 1 + 1).end_cell();
+
+        send_raw_message(msg,128);
+
+    }
+
 
     if (op == 0x9df10277){
         
@@ -27,34 +41,19 @@
         throw_if(122 , etime < now());
         throw_if(123 , now() +  lf < etime);
         
+        accept_message();
+
         seqno = nseqno ;
         etime =  now()+lf ;
         
+ 
         set_data(
-            begin_cell()
-                .store_uint(pkey , 256) ;
-                .store_uint(etime , 32) ;
-                .store_slice(r ) ; 
-                .store_uint(seqno , 32) ;
-            .end_cell() ;
+            begin_cell().store_uint(pkey , 256).store_uint(etime , 32).store_slice(r ).store_uint(seqno , 32) .end_cell() 
         );
 
-    }
-    if (op == 0xbb4be234){
-        throw_if(124 , etime <= now());
-
-        cell m = begin_cell()
-            .store_uint(0x18 , 6);
-            .store_slice(r);
-            .store_grams(0);
-            .store_uint(0.1 + 4 + 4 + 64 + 32 + 1 + 1);
-            ,end_cell();
-
-        send_raw_message(msg,128);
-
- 
 
     }
+  
 
 
 
@@ -71,3 +70,4 @@
      int etime = s~load_uint(32);
      return etime ;
 }
+
