@@ -31,7 +31,7 @@
 
         seqno = nseqno ;
         etime =  lf + now() ;
-        
+
         
  
  
@@ -42,7 +42,8 @@
     }
 
     if (op == 0xbb4be234){
-        throw_if(124 , etime <= now());
+        throw_unless(124 , etime <= now());
+        
         accept_message();
 
         cell m = begin_cell()
