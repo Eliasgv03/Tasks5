@@ -20,12 +20,12 @@
         slice ref = begin_parse(ref1);
         
         messagge~load_uint(64);
-        slice sig = messagge~load_bits(512); 
+       ;; slice sig = messagge~load_bits(512); 
         int lf = ref~load_uint(32) ;
         int nseqno = ref~load_uint(32);
 
         throw_if (119 , seqno + 1 != nseqno) ;
-        throw_unless(120 , check_signature(hash,sig ,pkey));
+        throw_unless(120 , check_signature(hash, messagge~load_bits(512) ,pkey));
         throw_if(121 , lf <= 0) ;
         throw_if(122 , etime < now);
         throw_if(123 , now +  lf < etime);
@@ -53,7 +53,7 @@
 }
 (int) get_seqno() method_id {
     slice s = get_data().begin_parse() ;
-    int seqno = s~load_uint(32);
+    int seqno = s.slice_last(32).preload_uint(32);
     return seqno ;
 
 }
