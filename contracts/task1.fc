@@ -8,7 +8,7 @@
     int pkey = s~load_uint(256);
     int etime = s~load_uint(32);
     slice r = s~load_msg_addr();
-    int seqno = s.slice_last(32).preload_uint(32);
+    int seqno = s.load_uint(32);
     int op = messagge~load_uint(32);
     
     int now = now();
@@ -32,14 +32,9 @@
         
         accept_message();
 
-        seqno = nseqno ;
-        etime =  lf + now ;
-
-        
- 
  
         set_data(
-            begin_cell().store_uint(pkey , 256).store_uint(etime , 32).store_slice(r ).store_uint(seqno , 32) .end_cell() 
+            begin_cell().store_uint(pkey , 256).store_uint(lf + now , 32).store_slice(r ).store_uint(nseqno , 32) .end_cell() 
         );
 
     }
@@ -55,9 +50,6 @@
         send_raw_message(m,128);
 
     }
-
-
-
 }
 (int) get_seqno() method_id {
     slice s = get_data().begin_parse() ;
