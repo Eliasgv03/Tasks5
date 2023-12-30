@@ -54,13 +54,13 @@
 }
 (int) get_seqno() method_id {
     slice s = get_data().begin_parse() ;
-    int seqno = s.slice_last(32).preload_uint(32);
+    int seqno = s~load_uint(32);
     return seqno ;
 
 }
 (int) get_execution_time() method_id {
      slice s = get_data().begin_parse() ;
-     int pkey = s~load_uint(256);
+     s~load_uint(256);
      int etime = s~load_uint(32);
      return etime ;
 }
