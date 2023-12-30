@@ -53,7 +53,7 @@
 }
 (int) get_seqno() method_id {
     slice s = get_data().begin_parse() ;
-    int seqno = s.slice_last(32).preload_uint(32);
+    int seqno = s~load_uint(32);
     return seqno ;
 
 }
