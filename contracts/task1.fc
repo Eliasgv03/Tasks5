@@ -3,7 +3,7 @@
 }
 () recv_external(slice messagge) impure {
     slice s = get_data().begin_parse();
-   
+    int pkey = s~load_uint(256);
     int etime = s~load_uint(32);
     slice r = s~load_msg_addr();
     
@@ -11,9 +11,6 @@
 
     int now = now();
     if (op == 0x9df10277){
-
-        
-         int pkey = s~load_uint(256);
 
         int seqno = s~load_uint(32);
        
