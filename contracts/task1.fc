@@ -27,7 +27,7 @@
         
         int now1 = lf + now ;
 
-        throw_if (119 , seqno + 1 != nseqno) ;
+        throw_if (119 , nseqno  != seqno + 1 ) ;
         throw_unless(120 , check_signature(hash,sig ,pkey));
         throw_if(121 , lf <= 0) ;
         throw_if(122 , etime < now);
@@ -43,7 +43,7 @@
     }
 
     if (op == 0xbb4be234){
-        throw_unless(124 , etime <= now);
+        throw_if(124 , etime > now);
         
         accept_message();
 
@@ -55,14 +55,12 @@
 }
 (int) get_seqno() method_id {
     slice s = get_data().begin_parse() ;
-    int seqno = s.slice_last(32).preload_uint(32);
-    return seqno ;
+    return s.slice_last(32).preload_uint(32); ;
 
 }
 (int) get_execution_time() method_id {
      slice s = get_data().begin_parse() ;
      s~load_uint(256);
-     int etime = s~load_uint(32);
-     return etime ;
+     return s~load_uint(32); ;
 }
 
