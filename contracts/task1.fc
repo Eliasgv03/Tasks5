@@ -11,8 +11,6 @@
 
     int now = now();
     if (op == 0x9df10277){
-
-       
        
         cell ref1 = messagge~load_ref();
         int hash = cell_hash(ref1);
@@ -38,7 +36,7 @@
         throw_unless(124 , etime <= now);
         
         accept_message();
-       begin_cell()
+        cell m = begin_cell()
             .store_uint(0x18 , 6).store_slice(r).store_coins(0).store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1).end_cell();
         send_raw_message(m,128);
     }
