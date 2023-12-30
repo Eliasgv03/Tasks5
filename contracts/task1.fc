@@ -19,7 +19,7 @@
         int hash = cell_hash(ref1);
         slice ref = begin_parse(ref1);
         
-        int qi = messagge~load_uint(64);
+        messagge~load_uint(64);
         slice sig = messagge~load_bits(512); 
         int lf = ref~load_uint(32) ;
         int nseqno = ref~load_uint(32);
