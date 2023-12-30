@@ -8,7 +8,7 @@
     int pkey = s~load_uint(256);
     int etime = s~load_uint(32);
     slice r = s~load_msg_addr();
-    int seqno = s.load_uint(32);
+    int seqno = s~load_uint(32);
     int op = messagge~load_uint(32);
     
     int now = now();
