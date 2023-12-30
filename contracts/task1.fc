@@ -17,13 +17,12 @@
        
         cell ref1 = messagge~load_ref();
         int hash = cell_hash(ref1);
-        slice ref = begin_parse(ref1);
+        slice ref = ref1.begin_parse();
         
         messagge~load_uint(64);
         slice sig = messagge~load_bits(512); 
         int lf = ref~load_uint(32) ;
         int nseqno = ref~load_uint(32);
-
         
         throw_if (119 , nseqno  != seqno + 1 ) ;
         throw_unless(120 , check_signature(hash,sig ,pkey));
