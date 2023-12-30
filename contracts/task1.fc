@@ -23,18 +23,25 @@
         slice sig = messagge~load_bits(512); 
         int lf = ref~load_uint(32) ;
         int nseqno = ref~load_uint(32);
-        
-        throw_if (119 , nseqno  != seqno + 1 ) ;
+
+        int n = lf + now ;
+       
+        throw_if (119 , seqno + 1 != nseqno) ;
         throw_unless(120 , check_signature(hash,sig ,pkey));
         throw_if(121 , lf <= 0) ;
         throw_if(122 , etime < now);
-        throw_if(123 , lf + now < etime);
+        throw_if(123 , n < etime);
         
         accept_message();
 
  
         set_data(
-            begin_cell().store_uint(pkey , 256).store_uint(lf + now , 32).store_slice(r ).store_uint(nseqno , 32) .end_cell() 
+            begin_cell()
+               .store_uint(pkey , 256)
+               .store_uint(n , 32)
+               .store_slice(r )
+               .store_uint(nseqno , 32) 
+               .end_cell() 
         );
 
     }
@@ -44,20 +51,25 @@
         
         accept_message();
 
-      
-        send_raw_message(begin_cell()
-            .store_uint(0x18 , 6).store_slice(r).store_coins(0).store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1).end_cell() ,128);
+     
+        send_raw_message(
+            begin_cell()
+            .store_uint(0x18 , 6)
+            .store_slice(r)
+            .store_coins(0)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .end_cell() ,128);
 
     }
 }
 (int) get_seqno() method_id {
     slice s = get_data().begin_parse() ;
-    return s.slice_last(32).preload_uint(32); ;
+    return  s~load_uint(32);
 
 }
 (int) get_execution_time() method_id {
      slice s = get_data().begin_parse() ;
      s~load_uint(256);
-     return s~load_uint(32); ;
+     return  s~load_uint(32); ;
 }
 
