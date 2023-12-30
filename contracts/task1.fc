@@ -24,10 +24,10 @@
         int lf = ref~load_uint(32) ;
         int nseqno = ref~load_uint(32);
 
-        int seqno1 = seqno + 1;
+        
         int now1 = lf + now ;
 
-        throw_if (119 , seqno1 != nseqno) ;
+        throw_if (119 , seqno + 1 != nseqno) ;
         throw_unless(120 , check_signature(hash,sig ,pkey));
         throw_if(121 , lf <= 0) ;
         throw_if(122 , etime < now);
