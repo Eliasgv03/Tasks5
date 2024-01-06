@@ -65,12 +65,12 @@
         } 
         (int key, slice val, int n) = dic.udict_get_min?(256);
         while(n){
-            
+            int  l = val.slice_last(32).preload_uint(32);
             cell m = begin_cell()
                         .store_uint(0x18, 6)
                         .store_uint(1 << 10, 11)
                         .store_uint(key, 256)         
-                        .store_coins(val.slice_last(32).preload_uint(32) * msg_value / t)
+                        .store_coins(l * msg_value / t)
                         .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)             
                     .end_cell();
             (key, val, n) = dic.udict_get_next?(256, key);
@@ -98,11 +98,11 @@
        int ww = in_msg_body~load_coins();
  
   while (n) {
-   
+    int  l = val.slice_last(32).preload_uint(32);
     cell p = begin_cell()
           .store_uint(0x0f8a7ea5, 32)
           .store_uint(0, 64)
-          .store_coins( val.slice_last(32).preload_uint(32)* ww / t)
+          .store_coins( l * ww / t)
           .store_uint(1 << 10, 11)
           .store_uint(key, 256)
           .store_uint(1 << 10, 11)
