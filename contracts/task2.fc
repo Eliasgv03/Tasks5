@@ -54,7 +54,7 @@
   throw_unless(122, n);
         int t = 0;
         while(n){
-            t += val~load_uint(32);
+            t += val.slice_last(32).preload_uint(32);
             (key, val, n) = dic.udict_get_next?(256, key);
         } 
         (int key, slice val, int n) = dic.udict_get_min?(256);
@@ -72,6 +72,23 @@
         }
   }
 
+
  
 } 
+
+
+cell get_users() method_id {
+  (slice s, slice di) = get_data().begin_parse().load_msg_addr();
+  return s~load_dict();
+}
+int get_user_share(slice r) method_id {
+  slice d2 = r~load_msg_addr();
+  (int cad, int di) = d2.parse_std_addr();
+  (slice s, int n) = get_users().udict_get?(256, di);
+  if (n) {
+    return s~load_uint(32);
+  } else {
+    return 0;  
+ }
+ }
   
