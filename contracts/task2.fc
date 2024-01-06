@@ -23,7 +23,7 @@
         d2 = in_msg_body~load_msg_addr();
         (int cad, int di3) = d2.parse_std_addr();
 
-  throw_unless(121, diccionario~udict_delete?(256, di3));
+  throw_unless(121, dic~udict_delete?(256, di3));
 
         set_data(begin_cell()
       .store_uint(1 << 10, 11)
