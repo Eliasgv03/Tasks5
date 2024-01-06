@@ -6,7 +6,6 @@
     
     int op = in_msg_body~load_uint(32);
 
-
     slice msg = in_msg_full.begin_parse();
     msg~skip_bits(4);
     slice s = get_data().begin_parse();
@@ -16,17 +15,20 @@
 
    if (op == 0x278205c8) {
         slice d2 = msg~load_msg_addr();
+       
         (int cad, int di2) = d2.parse_std_addr();
+        
         throw_if(120, di != di2);
 
         in_msg_body~skip_bits(64);
         d2 = in_msg_body~load_msg_addr();
+        
         (int cad, int di3) = d2.parse_std_addr();
 
   throw_unless(121, dic~udict_delete?(256, di3));
 
         set_data(begin_cell()
-      .store_uint(1 << 10, 11)
+            .store_uint(1 << 10, 11)
             .store_uint(di, 256)
             .store_dict(dic)
             .end_cell());   
@@ -34,24 +36,28 @@
 
   if (op == 0x368ddef3) {
         slice d2 = msg~load_msg_addr();
+      
         (int cad, int di2) = d2.parse_std_addr();
+        
         throw_if(120, di == di2);
 
         in_msg_body~load_uint(64);
         d2 = in_msg_body~load_msg_addr();
+       
         (int cad, int di3) = d2.parse_std_addr();
 
         dic~udict_set(256, di3, in_msg_body);
 
         set_data(begin_cell()
-      .store_uint(1 << 10, 11)
+            .store_uint(1 << 10, 11)
             .store_uint(di, 256)
             .store_dict(dic)
             .end_cell());   
   }
    if (op == 0x68530b3) {
-  (int key, slice val, int n) = dic.udict_get_min?(256);
-  throw_unless(122, n);
+  
+        (int key, slice val, int n) = dic.udict_get_min?(256);
+        throw_if(122, n == 0);
         int t = 0;
         while(n){
             t += val.slice_last(32).preload_uint(32);
@@ -71,6 +77,55 @@
       send_raw_message(m,1);
         }
   }
+     if (op == 0x7362d09c) {
+  (int key, slice val, int n) = dic.udict_get_min?(256);
+    throw_if(122, n == 0);
+        int t = 0;
+       
+        while(n){
+            t += val.slice_last(32).preload_uint(32);
+            (key, val, n) = dic.udict_get_next?(256, key);
+        } 
+       
+        (int key, slice val, int n) = dic.udict_get_min?(256);
+       
+        slice d2 = msg~load_msg_addr();
+       
+        (int cad, int di2) = d2.parse_std_addr();
+        
+        in_msg_body.slice_last(32).preload_uint(32);
+      
+       int ww = in_msg_body~load_coins();
+ 
+  while (n) {
+   
+    cell p = begin_cell()
+          .store_uint(0x0f8a7ea5, 32)
+          .store_uint(0, 64)
+          .store_coins( val.slice_last(32).preload_uint(32)* ww / t)
+          .store_uint(1 << 10, 11)
+          .store_uint(key, 256)
+          .store_uint(1 << 10, 11)
+          .store_uint(key, 256)
+          .store_uint(0, 1)
+          .store_coins(1)
+          .store_uint(0, 1)
+        .end_cell();
+    
+    cell m = begin_cell()
+        .store_uint(0x18, 6)
+        .store_uint(1 << 10, 11)
+        .store_uint(di2, 256)
+        .store_coins(20 * 1000 * 1000)
+        .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_ref(p)
+      .end_cell();
+    
+    (key, val, n) = dic.udict_get_next?(256, key);
+    
+    send_raw_message(m, 0);
+  }
+  } 
 
 
  
@@ -86,7 +141,7 @@ int get_user_share(slice r) method_id {
   (int cad, int di) = d2.parse_std_addr();
   (slice s, int n) = get_users().udict_get?(256, di);
   if (n) {
-    return s~load_uint(32);
+    return s.slice_last(32).preload_uint(32);
   } else {
     return 0;  
  }
