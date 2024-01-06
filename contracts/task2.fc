@@ -7,7 +7,7 @@
     int op = in_msg_body~load_uint(32);
 
     slice msg = in_msg_full.begin_parse();
-    msg~skip_bits(4);
+    int msg~load_uint(4);
     slice s = get_data().begin_parse();
     (int cad, int di) = s~load_msg_addr().parse_std_addr();
   
@@ -39,7 +39,7 @@
       
         (int cad, int di2) = d2.parse_std_addr();
         
-        throw_if(120, di == di2);
+        throw_if(120, di != di2);
 
         in_msg_body~load_uint(64);
         d2 = in_msg_body~load_msg_addr();
