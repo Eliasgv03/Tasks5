@@ -14,6 +14,24 @@
   
     cell dic = s~load_dict();
 
+   if (op == 0x278205c8) {
+        slice d2 = msg~load_msg_addr();
+        (int cad, int di2) = d2.parse_std_addr();
+        throw_if(120, di != di2);
+
+        in_msg_body~skip_bits(64);
+        d2 = in_msg_body~load_msg_addr();
+        (int cad, int di3) = d2.parse_std_addr();
+
+  throw_unless(121, diccionario~udict_delete?(256, di3));
+
+        set_data(begin_cell()
+      .store_uint(1 << 10, 11)
+            .store_uint(di, 256)
+            .store_dict(dic)
+            .end_cell());   
+  }  
+
   if (op == 0x368ddef3) {
         slice d2 = msg~load_msg_addr();
         (int cad, int di2) = d2.parse_std_addr();
@@ -31,5 +49,6 @@
             .store_dict(dic)
             .end_cell());   
   }
-}
+ 
+} 
   
