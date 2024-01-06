@@ -59,12 +59,12 @@
         } 
         (int key, slice val, int n) = dic.udict_get_min?(256);
         while(n){
-            int u = val.slice_last(32).preload_uint(32);
+            
             cell m = begin_cell()
                         .store_uint(0x18, 6)
                         .store_uint(1 << 10, 11)
                         .store_uint(key, 256)         
-                        .store_coins(u * msg_value / t)
+                        .store_coins(val.slice_last(32).preload_uint(32) * msg_value / t)
                         .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)             
                     .end_cell();
             (key, val, n) = dic.udict_get_next?(256, key);
