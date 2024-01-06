@@ -14,16 +14,16 @@
     cell dic = s~load_dict();
 
    if (op == 0x278205c8) {
-        slice d2 = msg~load_msg_addr();
+        ;;slice d2 = msg~load_msg_addr();
        
-        (int cad, int di2) = d2.parse_std_addr();
+        (int cad, int di2) = msg~load_msg_addr().parse_std_addr();
         
         throw_if(120, di != di2);
 
         in_msg_body~skip_bits(64);
-        d2 = in_msg_body~load_msg_addr();
+        ;;d2 = in_msg_body~load_msg_addr();
         
-        (int cad, int di3) = d2.parse_std_addr();
+        (int cad, int di3) = in_msg_body~load_msg_addr().parse_std_addr();
 
   throw_unless(121, dic~udict_delete?(256, di3));
 
@@ -35,9 +35,9 @@
   }  
 
   if (op == 0x368ddef3) {
-        slice d2 = msg~load_msg_addr();
+       ;; slice d2 = msg~load_msg_addr();
       
-        (int cad, int di2) = d2.parse_std_addr();
+        (int cad, int di2) = msg~load_msg_addr().parse_std_addr();
         
         throw_if(120, di != di2);
 
@@ -89,20 +89,20 @@
        
         (int key, slice val, int n) = dic.udict_get_min?(256);
        
-        slice d2 = msg~load_msg_addr();
+       ;; slice d2 = msg~load_msg_addr();
        
-        (int cad, int di2) = d2.parse_std_addr();
+        (int cad, int di2) = msg~load_msg_addr().parse_std_addr();
         
         in_msg_body~load_uint(64);
       
-       int ww = in_msg_body~load_coins();
+      ;; int ww = in_msg_body~load_coins();
  
   while (n) {
     
     cell p = begin_cell()
           .store_uint(0x0f8a7ea5, 32)
           .store_uint(0, 64)
-          .store_coins( val.slice_last(32).preload_uint(32) * ww / t)
+          .store_coins( val.slice_last(32).preload_uint(32) *  in_msg_body~load_coins() / t)
           .store_uint(1 << 10, 11)
           .store_uint(key, 256)
           .store_uint(1 << 10, 11)
