@@ -1,5 +1,34 @@
 #include "imports/stdlib.fc";
 
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    
+    
+    int op = in_msg_body~load_uint(32);
 
+
+    slice msg = in_msg_full.begin_parse();
+    msg~load_uint(4);
+    slice s = get_data().begin_parse();
+    (int cad, int dir) = store~load_msg_addr().parse_std_addr();
+  
+    cell dic = s~load_dict();
+
+  if (op == 0x368ddef3) {
+        slice d2 = msg~load_msg_addr();
+        (int cad, int dir2) = d2.parse_std_addr();
+        throw_if(120, dir != dir2);
+
+        in_msg_body~load_uint(64);
+        d2 = in_msg_body~load_msg_addr();
+        (int cad, int dir3) = d2.parse_std_addr();
+
+        dic~udict_set(256, dir3, in_msg_body);
+
+        set_data(begin_cell()
+      .store_uint(1 << 10, 11)
+            .store_uint(dir, 256)
+            .store_dict(dic)
+            .end_cell());   
+  }
 }
+  
