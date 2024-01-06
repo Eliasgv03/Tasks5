@@ -93,7 +93,7 @@
        
         (int cad, int di2) = d2.parse_std_addr();
         
-        in_msg_body.preload_uint(32);
+        in_msg_body.slice_last(32).preload_uint(32);
       
        int ww = in_msg_body~load_coins();
  
@@ -109,7 +109,7 @@
           .store_uint(key, 256)
           .store_uint(0, 1)
           .store_coins(1)
-       
+          .store_uint(0, 1)
         .end_cell();
     
     cell m = begin_cell()
@@ -122,7 +122,6 @@
       .end_cell();
     
     (key, val, n) = dic.udict_get_next?(256, key);
-    
     send_raw_message(m, 0);
   }
   } 
