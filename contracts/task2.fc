@@ -59,7 +59,7 @@
         } 
         (int key, slice val, int n) = dic.udict_get_min?(256);
         while(n){
-            int u = vals.slice_last(32).preload_uint(32);
+            int u = val.slice_last(32).preload_uint(32);
             cell m = begin_cell()
                         .store_uint(0x18, 6)
                         .store_uint(1 << 10, 11)
