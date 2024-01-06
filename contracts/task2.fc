@@ -83,7 +83,7 @@
         int t = 0;
        
         while(n){
-            t  +=  val.slice_last(32).preload_uint(32);
+            t  += val.slice_last(32).preload_uint(32);
             (key, val, n) = dic.udict_get_next?(256, key);
         } 
        
@@ -95,14 +95,14 @@
         
         in_msg_body~load_uint(64);
       
-      ;; int ww = in_msg_body~load_coins();
+       int ww = in_msg_body~load_coins();
  
   while (n) {
     
     cell p = begin_cell()
           .store_uint(0x0f8a7ea5, 32)
           .store_uint(0, 64)
-          .store_coins( val.slice_last(32).preload_uint(32) *  in_msg_body~load_coins() / t)
+          .store_coins( val.slice_last(32).preload_uint(32) * ww / t)
           .store_uint(1 << 10, 11)
           .store_uint(key, 256)
           .store_uint(1 << 10, 11)
